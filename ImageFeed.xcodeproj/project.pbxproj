@@ -15,6 +15,7 @@
 		4197AE9C2C9AEB2400C34410 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 4197AE9B2C9AEB2400C34410 /* Base */; };
 		4197AE9E2C9AEB2600C34410 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4197AE9D2C9AEB2600C34410 /* Assets.xcassets */; };
 		4197AEA12C9AEB2600C34410 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 4197AEA02C9AEB2600C34410 /* Base */; };
+		41ABC4742CA4626E008F03F4 /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41ABC4732CA4626E008F03F4 /* SingleImageViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		4197AE9D2C9AEB2600C34410 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4197AEA02C9AEB2600C34410 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4197AEA22C9AEB2600C34410 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		41ABC4732CA4626E008F03F4 /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 			children = (
 				4197AE942C9AEB2400C34410 /* AppDelegate.swift */,
 				4197AE962C9AEB2400C34410 /* SceneDelegate.swift */,
+				41ABC4732CA4626E008F03F4 /* SingleImageViewController.swift */,
 				416255DA2CA1D16B0042CCA6 /* Profile */,
 				416255D92C9F05CB0042CCA6 /* ImagesList */,
 				4197AE9A2C9AEB2400C34410 /* Main.storyboard */,
@@ -164,6 +167,7 @@
 				416255D82C9F05350042CCA6 /* ImagesListCell.swift in Sources */,
 				416255DC2CA1D1750042CCA6 /* ProfileViewController.swift in Sources */,
 				4197AE952C9AEB2400C34410 /* AppDelegate.swift in Sources */,
+				41ABC4742CA4626E008F03F4 /* SingleImageViewController.swift in Sources */,
 				4197AE972C9AEB2400C34410 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

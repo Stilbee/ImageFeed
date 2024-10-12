@@ -12,9 +12,12 @@ final class OAuth2Service {
 
     private init() {}
     
-    public func fetchOAuthToken(code: String, completeHandler: @escaping (OAuthTokenResponseBody?) -> Void) {
+    public func fetchOAuthToken(code: String, completeHandler: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void) {
         guard var urlComponents = URLComponents(string: OAuth2ServiceConstants.unsplashTokenURLString)
-        else { return }
+        else {
+            print("error: unsplashTokenURLString is nil!")
+            return
+        }
         
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: Constants.accessKey),
@@ -25,6 +28,7 @@ final class OAuth2Service {
         ]
         
         guard let url = urlComponents.url else {
+            print("error: urlComponent is nil!")
             return
         }
         
@@ -37,13 +41,15 @@ final class OAuth2Service {
                 do {
                     let decoder = JSONDecoder()
                     let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    completeHandler(response)
+                    completeHandler(.success(response))
                 } catch {
-                    completeHandler(nil)
+                    completeHandler(.failure(error))
                 }
                 break
             case .failure(let error):
+                print("error: while getting response from request!")
                 print(error)
+                completeHandler(.failure(error))
                 break
             }
         }

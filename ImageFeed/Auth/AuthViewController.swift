@@ -49,11 +49,16 @@ extension AuthViewController: WebViewViewControllerDelegate {
         vc.dismiss(animated: true)
         
         oauth2Service.fetchOAuthToken(code: code) { response in
-            guard let accessToken = response?.accessToken else {
-                return
+            switch (response) {
+            case .success(let response):
+                self.storage.accessToken = response.accessToken
+                self.delegate?.didAuthenticate(self)
+                break;
+            case .failure(let error):
+                print("Cannot fetch oAuth token with error")
+                print(error)
+                break;
             }
-            self.storage.accessToken = accessToken
-            self.delegate?.didAuthenticate(self)
         }
     }
     

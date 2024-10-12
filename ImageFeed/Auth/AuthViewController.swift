@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import ProgressHUD
 
 protocol AuthViewControllerDelegate: AnyObject {
     func didAuthenticate(_ vc: AuthViewController)
@@ -46,13 +47,15 @@ final class AuthViewController: UIViewController {
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        vc.dismiss(animated: true)
-        
+        UIBlockingProgressHUD.show()
         oauth2Service.fetchOAuthToken(code: code) { response in
+            UIBlockingProgressHUD.dismiss()
+            
             switch (response) {
             case .success(let response):
                 self.storage.accessToken = response.accessToken
                 self.delegate?.didAuthenticate(self)
+                vc.dismiss(animated: true)
                 break;
             case .failure(let error):
                 print("Cannot fetch oAuth token with error")

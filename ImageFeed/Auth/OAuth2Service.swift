@@ -7,12 +7,36 @@
 
 import Foundation
 
+enum AuthServiceError: Error {
+    case invalidRequest
+}
+
 final class OAuth2Service {
     static let shared = OAuth2Service()
 
+    private var task: URLSessionTask?
+    private var lastCode: String?
+    
     private init() {}
     
     public func fetchOAuthToken(code: String, completeHandler: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void) {
+        assert(Thread.isMainThread)
+        
+        if task != nil {
+            if lastCode != code {
+                task?.cancel()
+            } else {
+                completeHandler(.failure(AuthServiceError.invalidRequest))
+                return
+            }
+        } else {
+            if lastCode == code {
+                completeHandler(.failure(AuthServiceError.invalidRequest))
+                return
+            }
+        }
+        lastCode = code
+        
         guard var urlComponents = URLComponents(string: OAuth2ServiceConstants.unsplashTokenURLString)
         else {
             print("error: unsplashTokenURLString is nil!")
@@ -35,7 +59,7 @@ final class OAuth2Service {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         
-        let dataTask = URLSession.shared.data(for: request) { result in
+        task = URLSession.shared.data(for: request) { result in
             switch result {
             case .success(let data):
                 do {
@@ -52,9 +76,11 @@ final class OAuth2Service {
                 completeHandler(.failure(error))
                 break
             }
+            self.task = nil
+            self.lastCode = nil
         }
         
-        dataTask.resume()
+        task?.resume()
     }
 }
 

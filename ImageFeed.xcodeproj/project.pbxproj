@@ -25,6 +25,7 @@
 		41B1028A2CB16F4800B40706 /* OAuth2TokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B102892CB16F4800B40706 /* OAuth2TokenStorage.swift */; };
 		41B1028D2CB1723500B40706 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B1028C2CB1723500B40706 /* SplashViewController.swift */; };
 		41B102902CB4CE3000B40706 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 41B1028F2CB4CE3000B40706 /* ProgressHUD */; };
+		41B102922CBA96CF00B40706 /* UIBlockingProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B102912CBA96CF00B40706 /* UIBlockingProgressHUD.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		41B102872CB16DD500B40706 /* OAuthTokenResponseBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthTokenResponseBody.swift; sourceTree = "<group>"; };
 		41B102892CB16F4800B40706 /* OAuth2TokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2TokenStorage.swift; sourceTree = "<group>"; };
 		41B1028C2CB1723500B40706 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		41B102912CBA96CF00B40706 /* UIBlockingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressHUD.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 				410FD06C2CAD4C1800984C8C /* Constants.swift */,
 				4197AE942C9AEB2400C34410 /* AppDelegate.swift */,
 				4197AE962C9AEB2400C34410 /* SceneDelegate.swift */,
+				41B102912CBA96CF00B40706 /* UIBlockingProgressHUD.swift */,
 				41B102862CB16DCD00B40706 /* Model */,
 				41B03E5D2CAE7F47007EBEB4 /* Auth */,
 				41ABC4762CA47FF7008F03F4 /* SingleImage */,
@@ -243,6 +246,7 @@
 				41B1028D2CB1723500B40706 /* SplashViewController.swift in Sources */,
 				41B03E5C2CAE7ECA007EBEB4 /* AuthViewController.swift in Sources */,
 				410FD06D2CAD4C1800984C8C /* Constants.swift in Sources */,
+				41B102922CBA96CF00B40706 /* UIBlockingProgressHUD.swift in Sources */,
 				4197AE972C9AEB2400C34410 /* SceneDelegate.swift in Sources */,
 				41B102852CB16BE200B40706 /* URLSession+data.swift in Sources */,
 				41B03E5F2CAE8071007EBEB4 /* WebViewViewController.swift in Sources */,

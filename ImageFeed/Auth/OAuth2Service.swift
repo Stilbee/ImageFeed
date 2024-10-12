@@ -12,7 +12,7 @@ final class OAuth2Service {
 
     private init() {}
     
-    public func fetchOAuthToken(code: String, completeHandler: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void) {
+    public func fetchOAuthToken(code: String, completeHandler: @escaping (Result<String, Error>) -> Void) {
         guard var urlComponents = URLComponents(string: OAuth2ServiceConstants.unsplashTokenURLString)
         else {
             print("error: unsplashTokenURLString is nil!")
@@ -41,7 +41,7 @@ final class OAuth2Service {
                 do {
                     let decoder = JSONDecoder()
                     let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    completeHandler(.success(response))
+                    completeHandler(.success(response.accessToken))
                 } catch {
                     completeHandler(.failure(error))
                 }

@@ -48,10 +48,10 @@ extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
         vc.dismiss(animated: true)
         
-        oauth2Service.fetchOAuthToken(code: code) { response in
-            switch (response) {
-            case .success(let response):
-                self.storage.accessToken = response.accessToken
+        oauth2Service.fetchOAuthToken(code: code) { result in
+            switch (result) {
+            case .success(let accessToken):
+                self.storage.accessToken = accessToken
                 self.delegate?.didAuthenticate(self)
                 break;
             case .failure(let error):

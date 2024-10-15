@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class ProfileViewController: UIViewController {
 
@@ -13,12 +14,49 @@ class ProfileViewController: UIViewController {
     private let exitButton = UIButton(type: .custom)
     private let nameLabel = UILabel()
     private let loginLabel = UILabel()
-    private let textLabel = UILabel()
+    private let bioLabel = UILabel()
+    
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     override func viewDidLoad() {
+        initViews()
+        if let profile = ProfileService.shared.profile {
+            initProfile(profile)
+        }
+        
+        profileImageServiceObserver = NotificationCenter.default    // 2
+            .addObserver(
+                forName: ProfileImageService.didChangeNotification, // 3
+                object: nil,                                        // 4
+                queue: .main                                        // 5
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()                                 // 6
+            }
+        updateAvatar()
+    }
+    
+    private func updateAvatar() {
+        guard let avatarURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: avatarURL) else {
+            return
+        }
+        profileImageView.kf.setImage(with: url)
+    }
+    
+    private func initProfile(_ profile: Profile) {
+        nameLabel.text = profile.name
+        loginLabel.text = profile.loginName
+        bioLabel.text = profile.bio
+    }
+    
+    private func initViews() {
+        view.backgroundColor = .ypBlack
         let profilePhoto = UIImage(named: "profile_image")
         profileImageView.image = profilePhoto
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
+        profileImageView.layer.masksToBounds = true
+        profileImageView.layer.cornerRadius = 35
         view.addSubview(profileImageView)
         
         var arrayOfConstraints = [
@@ -66,15 +104,15 @@ class ProfileViewController: UIViewController {
         ]
         
         
-        textLabel.text = "Hello, world!"
-        textLabel.translatesAutoresizingMaskIntoConstraints = false
-        textLabel.font = UIFont.systemFont(ofSize: 13)
-        textLabel.textColor = UIColor.white
-        view.addSubview(textLabel)
+        bioLabel.text = "Hello, world!"
+        bioLabel.translatesAutoresizingMaskIntoConstraints = false
+        bioLabel.font = UIFont.systemFont(ofSize: 13)
+        bioLabel.textColor = UIColor.white
+        view.addSubview(bioLabel)
         
         arrayOfConstraints += [
-            textLabel.leadingAnchor.constraint(equalTo: profileImageView.leadingAnchor),
-            textLabel.topAnchor.constraint(equalTo: loginLabel.bottomAnchor, constant: 8)
+            bioLabel.leadingAnchor.constraint(equalTo: profileImageView.leadingAnchor),
+            bioLabel.topAnchor.constraint(equalTo: loginLabel.bottomAnchor, constant: 8)
         ]
         
         NSLayoutConstraint.activate(arrayOfConstraints)

@@ -19,7 +19,7 @@ final class OAuth2Service {
     
     private init() {}
     
-    public func fetchOAuthToken(code: String, completeHandler: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void) {
+    public func fetchOAuthToken(code: String, completeHandler: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
         
         if task != nil {
@@ -36,7 +36,6 @@ final class OAuth2Service {
             }
         }
         lastCode = code
-        
         guard var urlComponents = URLComponents(string: OAuth2ServiceConstants.unsplashTokenURLString)
         else {
             print("error: unsplashTokenURLString is nil!")
@@ -59,20 +58,13 @@ final class OAuth2Service {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         
-        task = URLSession.shared.data(for: request) { result in
+        task = URLSession.shared.objectTask(for: request) { (result: Result<OAuthTokenResponseBody, Error>) in
             switch result {
             case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    completeHandler(.success(response))
-                } catch {
-                    completeHandler(.failure(error))
-                }
+                completeHandler(.success(data.accessToken))
                 break
             case .failure(let error):
-                print("error: while getting response from request!")
-                print(error)
+                print("[fetchOAuthToken]: [failure] [\(code)] \(error.localizedDescription)")
                 completeHandler(.failure(error))
                 break
             }

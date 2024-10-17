@@ -40,16 +40,20 @@ final class SplashViewController: UIViewController {
         if let token = storage.accessToken {
             fetchProfile(token)
         } else {
-            let authNavController = createAuthNavController()
+            guard let authNavController = createAuthNavController() else {
+                return
+            }
             authNavController.modalPresentationStyle = .fullScreen
             present(authNavController, animated: true)
         }
     }
    
-    private func createAuthNavController() -> UINavigationController {
-        let authNavController = UIStoryboard(name: "Main", bundle: .main)
-            .instantiateViewController(withIdentifier: "AuthNavController") as! UINavigationController
-        let authViewController = authNavController.viewControllers[0] as! AuthViewController
+    private func createAuthNavController() -> UINavigationController? {
+        guard let authNavController = UIStoryboard(name: "Main", bundle: .main)
+            .instantiateViewController(withIdentifier: "AuthNavController") as? UINavigationController,
+              let authViewController = authNavController.viewControllers[0] as? AuthViewController else {
+            return nil
+        }
         authViewController.delegate = self
         return authNavController
     }

@@ -32,9 +32,11 @@ extension URLSession {
                     fulfillCompletionOnTheMainThread(.failure(NetworkError.httpStatusCode(statusCode)))
                 }
             } else if let error = error {
-                fulfillCompletionOnTheMainThread(.failure(NetworkError.urlRequestError(error))) // 5
+                print("[data]: [failure] [\(request)] \(error.localizedDescription)")
+                fulfillCompletionOnTheMainThread(.failure(NetworkError.urlRequestError(error)))
             } else {
-                fulfillCompletionOnTheMainThread(.failure(NetworkError.urlSessionError)) // 6
+                print("[data]: [failure] [\(request)] \(NetworkError.urlSessionError.localizedDescription)")
+                fulfillCompletionOnTheMainThread(.failure(NetworkError.urlSessionError))
             }
         })
         
@@ -47,7 +49,6 @@ extension URLSession {
         for request: URLRequest,
         completion: @escaping (Result<T, Error>) -> Void
     ) -> URLSessionTask {
-        let decoder = JSONDecoder()
         let task = data(for: request) { (result: Result<Data, Error>) in
             switch result {
             case .success(let data):
@@ -55,12 +56,13 @@ extension URLSession {
                     let decoder = JSONDecoder()
                     let response = try decoder.decode(T.self, from: data)
                     completion(.success(response))
-                } catch {
-                    print("Ошибка декодирования: \(error.localizedDescription), Данные: \(String(data: data, encoding: .utf8) ?? "")")
+                } catch (let error) {
+                    print("[objectTask]: [failure] [\(request)] \(error.localizedDescription)")
                     completion(.failure(error))
                 }
                 break
             case .failure(let error):
+                print("[objectTask]: [failure] [\(request)] \(error.localizedDescription)")
                 completion(.failure(error))
                 break
             }

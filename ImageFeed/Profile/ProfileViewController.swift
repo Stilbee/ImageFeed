@@ -14,7 +14,14 @@ class ProfileViewController: UIViewController {
     private let exitButton = UIButton(type: .custom)
     private let nameLabel = UILabel()
     private let loginLabel = UILabel()
-    private let bioLabel = UILabel()
+    private lazy var bioLabel = {
+        let label = UILabel()
+        label.text = "Hello, world!"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.textColor = UIColor.white
+        return label
+    }()
     
     private var profileImageServiceObserver: NSObjectProtocol?
     
@@ -24,14 +31,14 @@ class ProfileViewController: UIViewController {
             initProfile(profile)
         }
         
-        profileImageServiceObserver = NotificationCenter.default    // 2
+        profileImageServiceObserver = NotificationCenter.default
             .addObserver(
-                forName: ProfileImageService.didChangeNotification, // 3
-                object: nil,                                        // 4
-                queue: .main                                        // 5
+                forName: ProfileImageService.didChangeNotification,
+                object: nil,
+                queue: .main
             ) { [weak self] _ in
                 guard let self = self else { return }
-                self.updateAvatar()                                 // 6
+                self.updateAvatar()                                 
             }
         updateAvatar()
     }
@@ -103,11 +110,6 @@ class ProfileViewController: UIViewController {
             loginLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8)
         ]
         
-        
-        bioLabel.text = "Hello, world!"
-        bioLabel.translatesAutoresizingMaskIntoConstraints = false
-        bioLabel.font = UIFont.systemFont(ofSize: 13)
-        bioLabel.textColor = UIColor.white
         view.addSubview(bioLabel)
         
         arrayOfConstraints += [

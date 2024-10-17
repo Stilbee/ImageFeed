@@ -51,9 +51,11 @@ final class SplashViewController: UIViewController {
     private func createAuthNavController() -> UINavigationController? {
         guard let authNavController = UIStoryboard(name: "Main", bundle: .main)
             .instantiateViewController(withIdentifier: "AuthNavController") as? UINavigationController,
+              !authNavController.viewControllers.isEmpty,
               let authViewController = authNavController.viewControllers[0] as? AuthViewController else {
             return nil
         }
+        
         authViewController.delegate = self
         return authNavController
     }

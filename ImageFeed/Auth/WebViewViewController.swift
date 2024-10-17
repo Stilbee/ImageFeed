@@ -15,10 +15,10 @@ protocol WebViewViewControllerDelegate {
 }
 
 class WebViewViewController: UIViewController {
-    @IBOutlet var webView: WKWebView!
-    @IBOutlet var progressBar: UIProgressView!
+    @IBOutlet private var webView: WKWebView!
+    @IBOutlet private var progressBar: UIProgressView!
     
-    var delegate: WebViewViewControllerDelegate? = nil
+    weak var delegate: WebViewViewControllerDelegate? = nil
     private var estimatedProgressObservation: NSKeyValueObservation?
        
     override func viewDidLoad() {
@@ -40,8 +40,16 @@ class WebViewViewController: UIViewController {
     }
     
     private func loadAuthView() {
-        guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAuthorizeURLString) else {
+        guard let url = createRequestUrl() else {
             return
+        }
+        let request = URLRequest(url: url)
+        webView.load(request)
+    }
+    
+    private func createRequestUrl() -> URL? {
+        guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAuthorizeURLString) else {
+            return nil
         }
         
         urlComponents.queryItems = [
@@ -50,12 +58,8 @@ class WebViewViewController: UIViewController {
             URLQueryItem(name: "response_type", value: "code"),
             URLQueryItem(name: "scope", value: Constants.accessScope)
         ]
-        guard let url = urlComponents.url else {
-            return
-        }
         
-        let request = URLRequest(url: url)
-        webView.load(request)
+        return urlComponents.url
     }
 }
 

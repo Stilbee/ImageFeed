@@ -17,17 +17,17 @@ final class AuthViewController: UIViewController {
     private let storage = OAuth2TokenStorage()
     private let oauth2Service = OAuth2Service.shared
     
-    var delegate: AuthViewControllerDelegate? = nil
+    weak var delegate: AuthViewControllerDelegate? = nil
     
     override func viewDidLoad() {
         configureBackButton()
     }
     
     private func configureBackButton() {
-        navigationController?.navigationBar.backIndicatorImage = UIImage(named: "nav_back_button") // 1
-        navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "nav_back_button") // 2
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil) // 3
-        navigationItem.backBarButtonItem?.tintColor = UIColor(named: "YP Black") // 4
+        navigationController?.navigationBar.backIndicatorImage = UIImage(named: "nav_back_button")
+        navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "nav_back_button")
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationItem.backBarButtonItem?.tintColor = UIColor(named: "YP Black")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -61,10 +61,8 @@ extension AuthViewController: WebViewViewControllerDelegate {
                 self.storage.accessToken = accessToken
                 self.delegate?.didAuthenticate(self)
                 vc.dismiss(animated: true)
-                break;
             case .failure(let error):
                 self.showErrorAlert()
-                break;
             }
         }
     }

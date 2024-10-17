@@ -36,22 +36,8 @@ final class OAuth2Service {
             }
         }
         lastCode = code
-        guard var urlComponents = URLComponents(string: OAuth2ServiceConstants.unsplashTokenURLString)
-        else {
-            print("error: unsplashTokenURLString is nil!")
-            return
-        }
         
-        urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: Constants.accessKey),
-            URLQueryItem(name: "client_secret", value: Constants.secretKey),
-            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
-            URLQueryItem(name: "grant_type", value: "authorization_code"),
-            URLQueryItem(name: "code", value: code)
-        ]
-        
-        guard let url = urlComponents.url else {
-            print("error: urlComponent is nil!")
+        guard let url = createRequestUrl(with: code) else {
             return
         }
         
@@ -73,6 +59,28 @@ final class OAuth2Service {
         }
         
         task?.resume()
+    }
+    
+    private func createRequestUrl(with code: String) -> URL? {
+        guard var urlComponents = URLComponents(string: OAuth2ServiceConstants.unsplashTokenURLString)
+        else {
+            print("error: unsplashTokenURLString is nil!")
+            return nil
+        }
+        
+        urlComponents.queryItems = [
+            URLQueryItem(name: "client_id", value: Constants.accessKey),
+            URLQueryItem(name: "client_secret", value: Constants.secretKey),
+            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
+            URLQueryItem(name: "grant_type", value: "authorization_code"),
+            URLQueryItem(name: "code", value: code)
+        ]
+        
+        guard let url = urlComponents.url else {
+            print("error: urlComponent is nil!")
+            return nil
+        }
+        return url
     }
 }
 

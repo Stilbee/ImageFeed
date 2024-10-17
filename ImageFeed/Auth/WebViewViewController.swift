@@ -9,12 +9,12 @@ import Foundation
 import UIKit
 import WebKit
 
-protocol WebViewViewControllerDelegate {
+protocol WebViewViewControllerDelegate: AnyObject {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String)
     func webViewViewControllerDidCancel(_ vc: WebViewViewController)
 }
 
-class WebViewViewController: UIViewController {
+final class WebViewViewController: UIViewController {
     @IBOutlet private var webView: WKWebView!
     @IBOutlet private var progressBar: UIProgressView!
     

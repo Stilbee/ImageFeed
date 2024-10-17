@@ -15,7 +15,7 @@ class ProfileService {
     private let meUrlString = "https://api.unsplash.com/me"
     private(set) var profile: Profile?
     
-    public func fetchProfile(_ accessToken: String, completeHandler: @escaping (Result<ProfileResponseBody, Error>) -> Void) {
+    public func fetchProfile(_ accessToken: String, completeHandler: @escaping (Result<ProfileResult, Error>) -> Void) {
         guard let url = URL(string: meUrlString) else {
             return
         }
@@ -23,7 +23,7 @@ class ProfileService {
         var request = URLRequest(url: url)
         request.setValue("Bearer " + accessToken, forHTTPHeaderField: "Authorization")
         
-        let task = URLSession.shared.objectTask(for: request) { (result: Result<ProfileResponseBody, Error>) in
+        let task = URLSession.shared.objectTask(for: request) { (result: Result<ProfileResult, Error>) in
             switch result {
             case .success(let data):
                 self.profile = self.convertResponseToProfile(data)
@@ -39,12 +39,16 @@ class ProfileService {
         task.resume()
     }
     
-    private func convertResponseToProfile(_ response: ProfileResponseBody) -> Profile {
+    private func convertResponseToProfile(_ response: ProfileResult) -> Profile {
         return Profile(
             username: response.username,
             loginName: "@" + response.username,
             name: response.firstName + " " + response.lastName,
             bio: response.bio
         )
+    }
+    
+    public func cleanProfile() {
+        profile = nil
     }
 }

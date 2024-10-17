@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct OAuthTokenResponseBody: Codable {
+struct OAuthTokenResult: Codable {
     let accessToken: String
 
     private enum CodingKeys: String, CodingKey {

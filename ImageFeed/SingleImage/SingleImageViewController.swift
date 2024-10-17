@@ -6,18 +6,11 @@
 //
 
 import UIKit
+import Kingfisher
 
 class SingleImageViewController: UIViewController {
     
-    var myImage: UIImage? {
-        didSet {
-            guard isViewLoaded, let myImage else { return }
-
-            imageView.image = myImage
-            imageView.frame.size = myImage.size
-            rescaleAndCenterImageInScrollView(image: myImage)
-        }
-    }
+    var imageUrlString: String?
     
     @IBOutlet private var scrollView: UIScrollView!
     @IBOutlet private var imageView: UIImageView!
@@ -26,11 +19,28 @@ class SingleImageViewController: UIViewController {
         super.viewDidLoad()
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
+
+        loadImage()
+    }
+    
+    private func loadImage() {
+        guard let imageUrlString,
+              let imageUrl = URL(string: imageUrlString)
+        else { return }
         
-        guard let myImage else { return }
-        imageView.image = myImage
-        imageView.frame.size = myImage.size
-        rescaleAndCenterImageInScrollView(image: myImage)
+        UIBlockingProgressHUD.show()
+        imageView.kf.setImage(with: imageUrl) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            
+            guard let self = self else { return }
+            switch result {
+            case .success(let imageResult):
+                imageView.frame.size = imageResult.image.size
+                self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+            case .failure:
+                break
+            }
+        }
     }
     
     @IBAction func didClickBackButton(_ sender: Any) {
@@ -38,9 +48,9 @@ class SingleImageViewController: UIViewController {
     }
     
     @IBAction func didTapShareButton(_ sender: Any) {
-        guard let myImage else { return }
+        guard let image = imageView.image else { return }
         let share = UIActivityViewController(
-            activityItems: [myImage],
+            activityItems: [image],
             applicationActivities: nil
         )
         present(share, animated: true, completion: nil)

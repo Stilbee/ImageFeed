@@ -54,6 +54,7 @@ extension URLSession {
             case .success(let data):
                 do {
                     let decoder = JSONDecoder()
+                    decoder.dateDecodingStrategy = .iso8601
                     let response = try decoder.decode(T.self, from: data)
                     completion(.success(response))
                 } catch (let error) {

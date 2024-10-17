@@ -44,7 +44,7 @@ final class OAuth2Service {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         
-        task = URLSession.shared.objectTask(for: request) { (result: Result<OAuthTokenResponseBody, Error>) in
+        task = URLSession.shared.objectTask(for: request) { (result: Result<OAuthTokenResult, Error>) in
             switch result {
             case .success(let data):
                 completeHandler(.success(data.accessToken))

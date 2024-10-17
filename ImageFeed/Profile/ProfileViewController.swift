@@ -77,6 +77,7 @@ class ProfileViewController: UIViewController {
         let exitPhoto = UIImage(named: "ic_exit")
         exitButton.setImage(exitPhoto, for: .normal)
         exitButton.translatesAutoresizingMaskIntoConstraints = false
+        exitButton.addTarget(self, action: #selector(didClickExitButton), for: .touchUpInside)
         view.addSubview(exitButton)
         
         arrayOfConstraints += [
@@ -86,8 +87,6 @@ class ProfileViewController: UIViewController {
             exitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ]
         
-        
-        nameLabel.text = "Екатерина Новикова"
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = UIFont.boldSystemFont(ofSize: 23)
         nameLabel.textColor = .white
@@ -98,8 +97,6 @@ class ProfileViewController: UIViewController {
             nameLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 8)
         ]
         
-    
-        loginLabel.text = "@ekaterina_nov"
         loginLabel.translatesAutoresizingMaskIntoConstraints = false
         loginLabel.font = UIFont.systemFont(ofSize: 13)
         loginLabel.textColor = UIColor(red: 174, green: 175, blue: 180, alpha: 1)
@@ -118,5 +115,20 @@ class ProfileViewController: UIViewController {
         ]
         
         NSLayoutConstraint.activate(arrayOfConstraints)
+    }
+    
+    @objc private func didClickExitButton() {
+        ProfileLogoutService.shared.logout()
+        switchToSplashViewController()
+    }
+    
+    private func switchToSplashViewController() {
+        guard let window = UIApplication.shared.windows.first else {
+            assertionFailure("Invalid window configuration")
+            return
+        }
+        
+        let splashViewController = SplashViewController()
+        window.rootViewController = splashViewController
     }
 }

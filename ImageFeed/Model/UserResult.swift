@@ -7,10 +7,10 @@
 
 import Foundation
 
-class UserResult: Codable {
+struct UserResult: Codable {
     let username: String
     let firstName: String
-    let lastName: String
+    let lastName: String?
     let bio: String?
     let profileImage: [String: String]?
 

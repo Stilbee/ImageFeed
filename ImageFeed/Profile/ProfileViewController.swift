@@ -118,8 +118,15 @@ class ProfileViewController: UIViewController {
     }
     
     @objc private func didClickExitButton() {
-        ProfileLogoutService.shared.logout()
-        switchToSplashViewController()
+        
+        let alert = UIAlertController(title: "Пока, пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Да", style: .default, handler: { action in
+            ProfileLogoutService.shared.logout()
+            self.switchToSplashViewController()
+        }))
+        alert.addAction(UIAlertAction(title: "Нет", style: .cancel))
+        
+        present(alert, animated: true)
     }
     
     private func switchToSplashViewController() {

@@ -43,7 +43,7 @@ class ProfileService {
         return Profile(
             username: response.username,
             loginName: "@" + response.username,
-            name: response.firstName + " " + response.lastName,
+            name: response.firstName + " " + (response.lastName ?? ""),
             bio: response.bio
         )
     }

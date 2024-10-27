@@ -68,6 +68,7 @@
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="InL-Mn-utU">
                                                             <rect key="frame" x="317" y="0.0" width="44" height="44"/>
+                                                            <accessibility key="accessibilityConfiguration" identifier="LikeButton"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="gyK-6Q-xU4"/>
                                                                 <constraint firstAttribute="width" constant="44" id="o0u-HI-eER"/>
@@ -170,6 +171,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qfT-Cr-P3C">
                                 <rect key="frame" x="8" y="8" width="48" height="48"/>
+                                <accessibility key="accessibilityConfiguration" identifier="NavBackButton"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="saO-El-nrN"/>
                                     <constraint firstAttribute="width" constant="48" id="wBn-xk-ouO"/>
@@ -264,6 +266,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LiB-fA-3d7">
                                 <rect key="frame" x="32" y="680" width="329" height="48"/>
                                 <color key="backgroundColor" name="YP_White"/>
+                                <accessibility key="accessibilityConfiguration" identifier="Authenticate"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="QfV-6v-Xeg"/>
                                 </constraints>

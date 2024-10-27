@@ -11,7 +11,12 @@ enum ProfileImageServiceError: Error {
     case invalidRequest
 }
 
-final class ProfileImageService {
+public protocol ProfileImageServiceProtocol {
+    var avatarURL: String? { get }
+    func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void)
+}
+
+final class ProfileImageService: ProfileImageServiceProtocol {
     public static let shared = ProfileImageService()
     
     private init() {}

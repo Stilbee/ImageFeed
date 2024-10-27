@@ -8,8 +8,18 @@
 import UIKit
 import Kingfisher
 
-class ProfileViewController: UIViewController {
 
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfileViewPresenterProtocol? { get set }
+    func setNameText(_ name: String)
+    func setLoginText(_ login: String)
+    func setBioText(_ bio: String)
+    func setAvatarImageUrl(_ url: URL)
+}
+
+final class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
+    var presenter: ProfileViewPresenterProtocol?
+    
     private let profileImageView = UIImageView()
     private let exitButton = UIButton(type: .custom)
     private let nameLabel = UILabel()
@@ -23,38 +33,25 @@ class ProfileViewController: UIViewController {
         return label
     }()
     
-    private var profileImageServiceObserver: NSObjectProtocol?
-    
     override func viewDidLoad() {
         initViews()
-        if let profile = ProfileService.shared.profile {
-            initProfile(profile)
-        }
-        
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ProfileImageService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else { return }
-                self.updateAvatar()                                 
-            }
-        updateAvatar()
+        presenter?.viewDidLoad()
     }
     
-    private func updateAvatar() {
-        guard let avatarURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: avatarURL) else {
-            return
-        }
+    func setNameText(_ name: String) {
+        nameLabel.text = name
+    }
+    
+    func setLoginText(_ login: String) {
+        loginLabel.text = login
+    }
+    
+    func setBioText(_ bio: String) {
+        bioLabel.text = bio
+    }
+    
+    func setAvatarImageUrl(_ url: URL) {
         profileImageView.kf.setImage(with: url)
-    }
-    
-    private func initProfile(_ profile: Profile) {
-        nameLabel.text = profile.name
-        loginLabel.text = profile.loginName
-        bioLabel.text = profile.bio
     }
     
     private func initViews() {
@@ -78,6 +75,7 @@ class ProfileViewController: UIViewController {
         exitButton.setImage(exitPhoto, for: .normal)
         exitButton.translatesAutoresizingMaskIntoConstraints = false
         exitButton.addTarget(self, action: #selector(didClickExitButton), for: .touchUpInside)
+        exitButton.accessibilityIdentifier = "ExitButton"
         view.addSubview(exitButton)
         
         arrayOfConstraints += [
@@ -118,7 +116,6 @@ class ProfileViewController: UIViewController {
     }
     
     @objc private func didClickExitButton() {
-        
         let alert = UIAlertController(title: "Пока, пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Да", style: .default, handler: { action in
             ProfileLogoutService.shared.logout()

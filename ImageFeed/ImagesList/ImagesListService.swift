@@ -7,13 +7,20 @@
 
 import Foundation
 
-class ImagesListService {
+public protocol ImagesListServiceProtocol {
+    var photos: [Photo] { get }
+    func fetchPhotosNextPage()
+    func changeLike(photoId: String, isLike: Bool, _ completeHandler: @escaping (Result<PhotoResult, Error>) -> Void)
+}
+
+class ImagesListService: ImagesListServiceProtocol {
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     
     private let photosUrlString = "https://api.unsplash.com/photos"
     private(set) var photos: [Photo] = []
     
     private var lastLoadedPage: Int = 1
+    private var isLastPage: Bool = false
     private var task: URLSessionTask? = nil
     
     private let tokenStorage = OAuth2TokenStorage()
@@ -22,19 +29,25 @@ class ImagesListService {
         if task != nil {
             return
         }
+        if isLastPage {
+            return
+        }
         
         guard let request = createPhotoRequest() else {
             return
         }
         
-        task = URLSession.shared.objectTask(for: request) {
+        task = URLSession.shared.objectTask(for: request) { [weak self]
             (result: Result<Array<PhotoResult>, Error>) in
             
             switch (result) {
             case .success(let response):
-                self.addPhotos(from: response)
-                self.lastLoadedPage += 1
-                
+                if response.isEmpty {
+                    self?.isLastPage = true
+                } else {
+                    self?.addPhotos(from: response)
+                    self?.lastLoadedPage += 1
+                }
                 NotificationCenter.default
                     .post(
                         name: ImagesListService.didChangeNotification,
@@ -45,7 +58,7 @@ class ImagesListService {
                 break
             }
             
-            self.task = nil
+            self?.task = nil
         }
         
         task?.resume()
